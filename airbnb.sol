@@ -15,6 +15,8 @@ contract AirbnbContract {
     uint256 public electricityRate = 0.0016 ether;
     uint256 public waterRate = 0.0011 ether;
 
+    uint256 public deposit = 0.0111 ether;
+
 
     enum ContractState { NotActive, Active, Deposited, Calculated }
     ContractState public contractState;
@@ -45,7 +47,7 @@ contract AirbnbContract {
 
     function withdrawAmount() external payable onlyOccupant {
         require(contractState == ContractState.Active, "Contract is already Notactive and there is no Occupant Address");
-        require(msg.value <= address(this).balance, "Insufficient funds in the contract");
+        require(msg.value >= deposit, "Insufficient funds");
         emit FundsTransferred(occupant, msg.value);
         contractState = ContractState.Deposited;
     }
